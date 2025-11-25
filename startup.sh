@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Nginx ayarını public klasörüne yönlendir (Tekrar tekrar çalışırsa sorun olmaz)
-sed -i 's!/home/site/wwwroot!/home/site/wwwroot/public!g' /etc/nginx/sites-available/default
+# Dosyada zaten "/public;" yazıyor mu kontrol et. 
+# Yazmıyorsa değiştir (Böylece /public/public/public döngüsü olmaz)
+if ! grep -q "root /home/site/wwwroot/public;" /etc/nginx/sites-available/default; then
+    sed -i 's!root /home/site/wwwroot;!root /home/site/wwwroot/public;!g' /etc/nginx/sites-available/default
+fi
 
 # Nginx'i yeniden yükle
 service nginx reload
-
-# Dağıtım tamamlandı (Azure'un anlaması için)
-echo "Custom setup complete."
